@@ -587,6 +587,8 @@ public class menu extends JPanel implements ComponentListener, ActionListener, I
             CallableStatement cs = ConexionDB.conexion.prepareCall("{call Sp_MttoFamilias(?, ?)}");
 
             // Configurar los parámetros de entrada y salida
+            // -pendiente de revisar si dejar output o volver a poner *
+            // ---------------------------------------
             cs.registerOutParameter(1, java.sql.Types.INTEGER);
             cs.setInt(1, Integer.parseInt(txtFamid.getText())); // famId
 
@@ -595,14 +597,14 @@ public class menu extends JPanel implements ComponentListener, ActionListener, I
             cs.execute();
 
             // Obtener el valor del parámetro de salida famId
-            // int famIdOutput = cs.getInt(1);
+            int famIdOutput = cs.getInt(1);
             System.out.println(txtFamid.getText() + " FAM");
 
             modelo.setRowCount(0);
             llenaTablaFam();
 
-            // txtFamid.setText(String.valueOf(famIdOutput));
-            txtFamid.setText("*");
+            txtFamid.setText(String.valueOf(famIdOutput));
+            // txtFamid.setText("*");
             txtFamNombre.setText("");
 
         } catch (SQLException e) {
@@ -785,7 +787,7 @@ public class menu extends JPanel implements ComponentListener, ActionListener, I
             while (rs.next()) {
                 cmbTablas.addItem(rs.getString("TABLE_NAME"));
             }
-            cmbTablas.setSelectedIndex(2);
+            cmbTablas.setSelectedIndex(0);
         } catch (Exception e) {
             Notifications.getInstance().show(Notifications.Type.ERROR, Notifications.Location.TOP_CENTER,
                     "Error No tiene permisos en una tabla");
@@ -795,7 +797,7 @@ public class menu extends JPanel implements ComponentListener, ActionListener, I
 
     public void modoConsulta() {
         band = true;
-
+        grupo.clearSelection();
         txtArtId.setText("");
         txtArtNombre.setText("");
         txtArtDescripcion.setText("");
@@ -818,6 +820,7 @@ public class menu extends JPanel implements ComponentListener, ActionListener, I
 
     public void modoCaptura() {
         band = false;
+        grupo.clearSelection();
 
         txtArtId.setText("");
         txtArtNombre.setText("");
