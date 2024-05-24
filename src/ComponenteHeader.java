@@ -35,7 +35,6 @@ public class ComponenteHeader extends JPanel implements ComponentListener, Actio
         btnModoCaptura.addActionListener(this);
         btnModoConsulta.addActionListener(this);
         logout.addActionListener(this);
-
     }
 
     public void init() {

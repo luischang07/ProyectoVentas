@@ -16,17 +16,22 @@ public class ErrorHandler {
                 break;
             case 8115:
                 // El campo exede el limite de caracteres numerico
-                showNotification("Error: El campo exede el limite de caracteres numerico.");
+                showNotification("Error: El campo exede el maximo de caracteres numerico.");
                 break;
             case 2628:
                 // Excedió el límite de caracteres permitido
                 showNotification("Error: El campo excede el límite de caracteres permitido.");
                 break;
-            case 195:
+            case 262:
                 // Error específico cuando está en modo modificar y la PK no es reconocida
-                showNotification("Error: El tipo de datos JDBC no es válido.");
+                showNotification("Error: El Usuario NO tiene Permisos Para usar Procedimientos Almacenados.");
                 break;
-            // Agregar más casos según sea necesario
+            case 229:
+                showNotification("Error: El Usuario NO tiene permisos de Delete");
+            case 5000:
+                showNotification(e.getMessage());
+            case 168:
+                showNotification("Error: El campo exede el limite de almacenamiento caracteres numerico");
             default:
                 // Otro error SQL no manejado específicamente
                 handleGenericSqlError(e);

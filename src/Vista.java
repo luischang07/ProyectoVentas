@@ -24,7 +24,8 @@ public class Vista extends JPanel implements ActionListener, ComponentListener {
     private JTextField txtServidor;
     private JTextField txtBasedeDatos;
     private JTextField txtUsuario;
-    private JTextField txtContraseña;
+
+    private JPasswordField txtContraseña;
 
     private JPanel panel;
 
@@ -47,58 +48,47 @@ public class Vista extends JPanel implements ActionListener, ComponentListener {
     private void HazInterfaz() {
         setLayout(null);
 
-        Font robotoFont = new Font("Roboto", Font.PLAIN, 14);
-
+        // Boton de modo claro/oscuro
         lightDarkMode = new LightDarkMode(70);
         add(lightDarkMode);
 
-        // panel.setBounds((int) (this.getWidth() * .08), (int) (this.getWidth() * .05),
-        // (int) (this.getWidth() * .80),
-        // (int) (this.getHeight() * .50));
-
         panel = new JPanel();
-        add(panel);
 
         panel.setLayout(new Contenedorlbl_txt());
         panel.putClientProperty(FlatClientProperties.STYLE, ""
                 + "border:20,2,2,2;"
                 + "background:$Menu.background;"
                 + "arc:10");
+        add(panel);
 
         lblLogin = new JLabel("Login");
         panel.add(lblLogin);
 
         lblServidor = new JLabel("Servidor");
-        lblServidor.setFont(robotoFont);
         panel.add(lblServidor);
 
-        txtServidor = new JTextField();
+        txtServidor = new JTextField("Once");
         panel.add(txtServidor);
 
         lblBasedeDatos = new JLabel("Base de Datos");
-        lblBasedeDatos.setFont(robotoFont);
         panel.add(lblBasedeDatos);
 
-        txtBasedeDatos = new JTextField();
+        txtBasedeDatos = new JTextField("ventas");
         panel.add(txtBasedeDatos);
 
         lblUsuario = new JLabel("Usuario");
-        lblUsuario.setFont(robotoFont);
         panel.add(lblUsuario);
 
-        txtUsuario = new JTextField();
+        txtUsuario = new JTextField("Twice");
         panel.add(txtUsuario);
 
         lblContraseña = new JLabel("Contraseña");
-        lblContraseña.setFont(robotoFont);
         panel.add(lblContraseña);
 
-        txtContraseña = new JTextField();
+        txtContraseña = new JPasswordField("Once151103");
         panel.add(txtContraseña);
 
-        Font robotoFont2 = new Font("Roboto", Font.BOLD, 14);
         btnConectar = new JButton("Conectar");
-        btnConectar.setFont(robotoFont2);
         panel.add(btnConectar);
 
         setVisible(true);
@@ -110,16 +100,17 @@ public class Vista extends JPanel implements ActionListener, ComponentListener {
         String servidor = txtServidor.getText();
         String basededatos = txtBasedeDatos.getText();
         String usuario = txtUsuario.getText();
-        String contraseña = txtContraseña.getText();
+        char[] passwordChars = txtContraseña.getPassword();
+        String contraseña = new String(passwordChars);
 
-        // if (servidor.equals("") || basededatos.equals("") || usuario.equals("") ||
-        // contraseña.equals("")) {
-        // System.out.println("Faltan datos de conexión");
-        // Notifications.getInstance().show(Notifications.Type.INFO,
-        // Notifications.Location.TOP_CENTER,
-        // "Escribir los datos de conexión");
-        // return;
-        // }
+        if (servidor.equals("") || basededatos.equals("") || usuario.equals("") ||
+                contraseña.equals("")) {
+            System.out.println("Faltan datos de conexión");
+            Notifications.getInstance().show(Notifications.Type.INFO,
+                    Notifications.Location.TOP_CENTER,
+                    "Escribir los datos de conexión");
+            return;
+        }
 
         ConexionDB conexion = new ConexionDB(servidor, basededatos, usuario, contraseña);
         conexion.getConexion();
@@ -153,8 +144,6 @@ public class Vista extends JPanel implements ActionListener, ComponentListener {
         btnConectar.setFont(robotoFont3);
 
         lightDarkMode.setBounds((int) (w * .4), (int) (h * .80), (int) (w * .55), (int) (h * .10));
-
-        // revalidate();
     }
 
     @Override
