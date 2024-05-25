@@ -28,10 +28,17 @@ public class ErrorHandler {
                 break;
             case 229:
                 showNotification("Error: El Usuario NO tiene permisos de Delete");
+                break;
             case 5000:
                 showNotification(e.getMessage());
+                break;
+            case 50000:
+                // Insersion deshabilitada
+                showNotification(e.getMessage());
+                break;
             case 168:
                 showNotification("Error: El campo exede el limite de almacenamiento caracteres numerico");
+                break;
             default:
                 // Otro error SQL no manejado específicamente
                 handleGenericSqlError(e);
@@ -45,9 +52,6 @@ public class ErrorHandler {
     }
 
     public static void showNotification(String message) {
-        // Aquí puedes personalizar cómo deseas mostrar la notificación
-        // Puedes utilizar tu método Notifications.getInstance().show()
-        // Aquí se muestra simplemente como un ejemplo
         System.out.println("Mostrar notificación de error en el centro: " + message);
         Notifications.getInstance().show(Notifications.Type.ERROR, Notifications.Location.TOP_CENTER, message);
     }

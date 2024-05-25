@@ -238,6 +238,7 @@ public class menu extends JPanel implements ComponentListener, ActionListener, I
                     return;
                 }
                 insertarTablaFam();
+                btnGuardar.setEnabled(false);
                 return;
             }
             //
@@ -266,23 +267,27 @@ public class menu extends JPanel implements ComponentListener, ActionListener, I
                     }
                 }
                 insertarTablaArticulo();
+                btnGuardar.setEnabled(false);
                 return;
             }
         }
         if (evt.getSource() == rdModificar) {
             btnLimpiar.setEnabled(true);
             btnGuardar.setEnabled(true);
-            txtArtNombre.setEnabled(true);
-            txtArtDescripcion.setEnabled(true);
-            txtArtPrecio.setEnabled(true);
-            cmbFamid.setEnabled(true);
 
             if (cmbTablas.getSelectedItem().equals("familias")) {
+                txtFamNombre.setEnabled(true);
+
                 txtFamid.setText("");
                 txtFamid.setEditable(true);
                 return;
             }
             if (cmbTablas.getSelectedItem().equals("articulos")) {
+                txtArtNombre.setEnabled(true);
+                txtArtDescripcion.setEnabled(true);
+                txtArtPrecio.setEnabled(true);
+                cmbFamid.setEnabled(true);
+
                 txtArtId.setText("");
                 txtArtId.setEditable(true);
                 return;
@@ -291,14 +296,14 @@ public class menu extends JPanel implements ComponentListener, ActionListener, I
         if (evt.getSource() == rdNuevo) {
             btnLimpiar.setEnabled(true);
             btnGuardar.setEnabled(true);
-            showFamilias();
+            // showFamilias();
             if (cmbTablas.getSelectedItem().equals("familias")) {
                 txtFamid.setText("*");
                 txtFamid.setEditable(false);
                 return;
             }
             if (cmbTablas.getSelectedItem().equals("articulos")) {
-                showArticulos();
+                // showArticulos();
                 txtArtId.setText("*");
                 txtArtId.setEditable(false);
                 return;
@@ -349,14 +354,14 @@ public class menu extends JPanel implements ComponentListener, ActionListener, I
                 return;
             }
             if (cmbTablas.getSelectedItem().equals("articulos")) {
-                // if (txtArtId.getText().equals("") && txtArtNombre.getText().equals("")
-                // && txtArtDescripcion.getText().equals("") &&
-                // txtArtPrecio.getText().equals("")) {
-                // Notifications.getInstance().show(Notifications.Type.INFO,
-                // Notifications.Location.TOP_CENTER,
-                // "Ningun campo insertado, nada para eliminar");
-                // return;
-                // }
+                if (txtArtId.getText().isEmpty() && txtArtNombre.getText().isEmpty()
+                        && txtArtDescripcion.getText().isEmpty() && txtArtPrecio.getText().isEmpty()
+                        && cmbFamid.getSelectedItem().equals("Seleccione")) {
+                    Notifications.getInstance().show(Notifications.Type.INFO,
+                            Notifications.Location.TOP_CENTER,
+                            "Ningun campo insertado, nada para eliminar");
+                    return;
+                }
                 eliminarArt();
                 return;
             }
@@ -364,10 +369,13 @@ public class menu extends JPanel implements ComponentListener, ActionListener, I
     }
 
     private void limpiar() {
+        btnGuardar.setEnabled(true);
         if (cmbTablas.getSelectedItem().equals("familias")) {
             if (rdNuevo.isSelected()) {
                 txtFamid.setText("*");
                 txtFamNombre.setText("");
+
+                txtFamNombre.setEnabled(true);
                 return;
             }
             txtFamid.setText("");
@@ -387,11 +395,11 @@ public class menu extends JPanel implements ComponentListener, ActionListener, I
                 cmbFamid.setEnabled(true);
                 return;
             }
+
             txtArtId.setText("");
             txtArtNombre.setText("");
             txtArtDescripcion.setText("");
             txtArtPrecio.setText("");
-
             return;
         }
     }
@@ -400,14 +408,16 @@ public class menu extends JPanel implements ComponentListener, ActionListener, I
         try {
             Statement s = ConexionDB.conexion.createStatement();
 
-            ResultSet re = s.executeQuery(
-                    "select famid, famnombre from familias where famnombre = '" + cmbFamid.getSelectedItem() + "';");
-            re.next();
-            int famid = re.getInt("famid");
-
             StringBuilder consulta = new StringBuilder("DELETE FROM articulos WHERE");
 
-            consulta.append(" famid = ").append(famid).append("  AND");
+            if (!cmbFamid.getSelectedItem().equals("Seleccione")) {
+
+                ResultSet re = s.executeQuery(
+                        "select famid from familias where famnombre = '" + cmbFamid.getSelectedItem() + "';");
+                re.next();
+                int famid = re.getInt("famid");
+                consulta.append(" famid = ").append(famid).append("  AND");
+            }
 
             // agregar condiciones según los campos proporcionados
             if (!txtArtId.getText().isEmpty()) {
@@ -581,14 +591,11 @@ public class menu extends JPanel implements ComponentListener, ActionListener, I
 
             if (txtFamid.getText().equals("*")) {
                 txtFamid.setText("0");
-
             }
 
             CallableStatement cs = ConexionDB.conexion.prepareCall("{call Sp_MttoFamilias(?, ?)}");
 
             // Configurar los parámetros de entrada y salida
-            // -pendiente de revisar si dejar output o volver a poner *
-            // ---------------------------------------
             cs.registerOutParameter(1, java.sql.Types.INTEGER);
             cs.setInt(1, Integer.parseInt(txtFamid.getText())); // famId
 
@@ -603,9 +610,13 @@ public class menu extends JPanel implements ComponentListener, ActionListener, I
             modelo.setRowCount(0);
             llenaTablaFam();
 
+            // -pendiente de revisar si dejar output o volver a poner *
+            // ---------------------------------------
             txtFamid.setText(String.valueOf(famIdOutput));
             // txtFamid.setText("*");
-            txtFamNombre.setText("");
+            if (rdNuevo.isSelected()) {
+                txtFamNombre.setEnabled(false);
+            }
 
         } catch (SQLException e) {
             ErrorHandler.handleSqlException(e);
@@ -626,6 +637,7 @@ public class menu extends JPanel implements ComponentListener, ActionListener, I
                     Notifications.getInstance().show(Notifications.Type.INFO,
                             Notifications.Location.TOP_CENTER,
                             "El Articulo no existe.");
+                    re.close();
                     return;
                 }
             }
@@ -635,6 +647,7 @@ public class menu extends JPanel implements ComponentListener, ActionListener, I
             re.next();
             int famid = re.getInt("famid");
             String famnombre = re.getString("famnombre");
+            re.close();
 
             // Verificar si el procedimiento ya existe
             ResultSet rs = s.executeQuery(
@@ -645,6 +658,7 @@ public class menu extends JPanel implements ComponentListener, ActionListener, I
                 s.execute(procedimientoArt());
                 System.out.println("Procedure created successfully.");
             }
+            rs.close();
 
             if (txtArtId.getText().equals("*")) {
                 txtArtId.setText("0");
@@ -655,18 +669,21 @@ public class menu extends JPanel implements ComponentListener, ActionListener, I
             // Configurar los parámetros de entrada y salida
             cs.registerOutParameter(1, java.sql.Types.INTEGER); // artId (parámetro de salida)
             cs.setInt(1, Integer.parseInt(txtArtId.getText())); // artId (parámetro de entrada)
-            System.out.println("FAMNOMBRE: " + famnombre + " FAMID: " + famid);
-
             cs.setString(2, txtArtNombre.getText()); // artNombre
             cs.setString(3, txtArtDescripcion.getText()); // artDescripcion
             cs.setDouble(4, Double.parseDouble(txtArtPrecio.getText())); // artPrecio
+
+            System.out.println("FAMNOMBRE: " + famnombre + " FAMID: " + famid);
             cs.setInt(5, famid); // famId
 
             cs.execute();
 
             // Obtener el valor del parámetro de salida artId
             int artIdOutput = cs.getInt(1);
-
+            cs.close();
+            Notifications.getInstance().show(Notifications.Type.INFO,
+                    Notifications.Location.TOP_CENTER,
+                    "Articulo guardado correctamente. ArtId: " + artIdOutput);
             modelo.setRowCount(0);
             System.out.println("Antes");
             llenaTablaArt();
@@ -722,6 +739,7 @@ public class menu extends JPanel implements ComponentListener, ActionListener, I
         txtFamid.setText("");
 
         FlatAnimatedLafChange.showSnapshot();
+        btnGuardar.setEnabled(true);
         panelContent.add(lblArtId);
 
         panelContent.add(txtArtId);
@@ -751,6 +769,7 @@ public class menu extends JPanel implements ComponentListener, ActionListener, I
 
     private void llenarComboFam() {
         cmbFamid.removeAllItems();
+        cmbFamid.addItem("Seleccione");
         try {
             Statement s = ConexionDB.conexion.createStatement();
             ResultSet rs = s.executeQuery("select * from familias");
@@ -766,6 +785,7 @@ public class menu extends JPanel implements ComponentListener, ActionListener, I
         panelContent.removeAll();
 
         FlatAnimatedLafChange.showSnapshot();
+        btnGuardar.setEnabled(true);
         panelContent.add(lblFamid);
 
         panelContent.add(txtFamid);

@@ -123,7 +123,7 @@ public class Vista extends JPanel implements ActionListener, ComponentListener {
         float reduccion = 450;
         System.out.println("w: " + w + " h: " + h);
 
-        panel.setBounds((int) (w * .08), (int) (w * .05), (int) (w * .80), (int) (h * .5));
+        panel.setBounds((int) (w * .1), (int) (h * .1), (int) (w * .8), (int) (h * .6));
 
         Font robotoFont0 = Rutinas2.getFont("Roboto", true, 30, w, h, reduccion);
         lblLogin.setFont(robotoFont0);
