@@ -11,33 +11,36 @@ public class ErrorHandler {
         // Personalizar mensajes de error según el código de error SQL
         switch (errorCode) {
             case 201:
-                // Violación de restricción de clave foránea (FK)
-                showNotification("Error: Violación de restricción de clave foránea. FamId");
+                showNotification("Error: 201. Violación de restricción de clave foránea. TipID");
+                break;
+            case 547:
+                // Check constraint violation
+                showNotification("Error: 547. Violacion de restriccion SQL.");
                 break;
             case 8115:
                 // El campo exede el limite de caracteres numerico
-                showNotification("Error: El campo exede el maximo de caracteres numerico.");
+                showNotification("Error: 8115. El campo exede el maximo de caracteres numerico.");
                 break;
             case 2628:
                 // Excedió el límite de caracteres permitido
-                showNotification("Error: El campo excede el límite de caracteres permitido.");
+                showNotification("Error: 2628. El campo excede el límite de caracteres permitido.");
                 break;
             case 262:
                 // Error específico cuando está en modo modificar y la PK no es reconocida
-                showNotification("Error: El Usuario NO tiene Permisos Para usar Procedimientos Almacenados.");
+                showNotification("Error: 262. El Usuario NO tiene Permisos Para usar Procedimientos Almacenados.");
                 break;
             case 229:
-                showNotification("Error: El Usuario NO tiene permisos de Delete");
+                showNotification("Error: 229. El Usuario NO tiene permisos de Delete");
                 break;
             case 5000:
-                showNotification(e.getMessage());
+                showNotification("Error: 5000. " + e.getMessage());
                 break;
             case 50000:
                 // Insersion deshabilitada
-                showNotification(e.getMessage());
+                showNotification("Error: 50000. " + e.getMessage());
                 break;
             case 168:
-                showNotification("Error: El campo exede el limite de almacenamiento caracteres numerico");
+                showNotification("Error: 168. El campo exede el limite de almacenamiento caracteres numerico");
                 break;
             default:
                 // Otro error SQL no manejado específicamente

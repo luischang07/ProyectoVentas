@@ -73,7 +73,7 @@ public class Vista extends JPanel implements ActionListener, ComponentListener {
         lblBasedeDatos = new JLabel("Base de Datos");
         panel.add(lblBasedeDatos);
 
-        txtBasedeDatos = new JTextField("ventas");
+        txtBasedeDatos = new JTextField("Envios");
         panel.add(txtBasedeDatos);
 
         lblUsuario = new JLabel("Usuario");
@@ -128,19 +128,19 @@ public class Vista extends JPanel implements ActionListener, ComponentListener {
         Font robotoFont0 = Rutinas2.getFont("Roboto", true, 30, w, h, reduccion);
         lblLogin.setFont(robotoFont0);
 
-        Font robotoFont = Rutinas2.getFont("Roboto", true, 16, w, h, reduccion);
+        Font robotoFont = Rutinas2.getFont("Roboto", true, 14, w, h, reduccion);
         lblServidor.setFont(robotoFont);
         lblBasedeDatos.setFont(robotoFont);
         lblUsuario.setFont(robotoFont);
         lblContraseña.setFont(robotoFont);
 
-        Font robotoFont2 = Rutinas2.getFont("Roboto", true, 16, w, h, reduccion);
+        Font robotoFont2 = Rutinas2.getFont("Roboto", true, 14, w, h, reduccion);
         txtServidor.setFont(robotoFont2);
         txtBasedeDatos.setFont(robotoFont2);
         txtUsuario.setFont(robotoFont2);
         txtContraseña.setFont(robotoFont2);
 
-        Font robotoFont3 = Rutinas2.getFont("Roboto", true, 18, w, h, reduccion);
+        Font robotoFont3 = Rutinas2.getFont("Roboto", true, 16, w, h, reduccion);
         btnConectar.setFont(robotoFont3);
 
         lightDarkMode.setBounds((int) (w * .4), (int) (h * .80), (int) (w * .55), (int) (h * .10));

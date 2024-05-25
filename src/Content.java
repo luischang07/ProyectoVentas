@@ -38,8 +38,8 @@ public class Content implements LayoutManager {
 
             Component componente = miContenedor.getComponent(i);
 
-            int anchoComponente = (int) (miContenedor.getWidth() * 0.25);
-            int altoComponente = (int) (miContenedor.getHeight() * 0.18);
+            int anchoComponente = (int) (miContenedor.getWidth() * 0.33);
+            int altoComponente = (int) (miContenedor.getHeight() * 0.15);
 
             if (contador % 2 == 0) {
                 anchoComponente = (int) (miContenedor.getWidth() * 0.6);

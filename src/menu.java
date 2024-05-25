@@ -28,21 +28,23 @@ public class menu extends JPanel implements ComponentListener, ActionListener, I
     private JPanel pnlTabla;
 
     private JComboBox<String> cmbTablas;
-    private JComboBox<String> cmbFamid;
+    private JComboBox<String> cmbTipid;
 
-    private JLabel lblFamid;
-    private JLabel lblFamNombre;
-    private JLabel lblArtId;
-    private JLabel lblArtNombre;
-    private JLabel lblArtDescripcion;
-    private JLabel lblArtPrecio;
+    private JLabel lblTipid;
+    private JLabel lblTipNombre;
+    private JLabel lblClienteId;
+    private JLabel lblClienteNombre;
+    private JLabel lblClienteApellidos;
+    private JLabel lblClienteSexo;
+    private JLabel lblClienteLimiteCredito;
 
-    private JTextField txtFamid;
-    private JTextField txtFamNombre;
-    private JTextField txtArtId;
-    private JTextField txtArtNombre;
-    private JTextField txtArtDescripcion;
-    private JTextField txtArtPrecio;
+    private JTextField txtTipid;
+    private JTextField txtTipNombre;
+    private JTextField txtClienteId;
+    private JTextField txtClienteNombre;
+    private JTextField txtClienteApellidos;
+    private JTextField txtClienteSexo;
+    private JTextField txtClienteLimiteCredito;
 
     private JButton btnLimpiar;
     private JButton btnGuardar;
@@ -71,7 +73,7 @@ public class menu extends JPanel implements ComponentListener, ActionListener, I
 
     private void HazEscuchas() {
         addComponentListener(this);
-        txtArtId.addFocusListener(this);
+        txtClienteId.addFocusListener(this);
         cmbTablas.addItemListener(this);
         cmbTablas.addActionListener(this);
         btnBuscar.addActionListener(this);
@@ -136,19 +138,21 @@ public class menu extends JPanel implements ComponentListener, ActionListener, I
                 + "border:10,20,30,10");
         add(panelContent);
 
-        lblArtId = new JLabel("ArtId");
-        txtArtId = new JTextField();
-        lblArtNombre = new JLabel("ArtNombre");
-        txtArtNombre = new JTextField();
-        lblArtDescripcion = new JLabel("ArtDescripcion");
-        txtArtDescripcion = new JTextField();
-        lblArtPrecio = new JLabel("ArtPrecio");
-        txtArtPrecio = new JTextField();
-        lblFamid = new JLabel("Familia");
-        txtFamid = new JTextField();
-        lblFamNombre = new JLabel("FamNombre");
-        txtFamNombre = new JTextField();
-        cmbFamid = new JComboBox<>();
+        lblClienteId = new JLabel("ClienteId");
+        txtClienteId = new JTextField();
+        lblClienteNombre = new JLabel("ClienteNombre");
+        txtClienteNombre = new JTextField();
+        lblClienteApellidos = new JLabel("ClienteApellidos");
+        txtClienteApellidos = new JTextField();
+        lblClienteSexo = new JLabel("ClienteSexo");
+        txtClienteSexo = new JTextField();
+        lblClienteLimiteCredito = new JLabel("ClienteLimiteCredito");
+        txtClienteLimiteCredito = new JTextField();
+        lblTipid = new JLabel("Tipo");
+        txtTipid = new JTextField();
+        lblTipNombre = new JLabel("TipNombre");
+        txtTipNombre = new JTextField();
+        cmbTipid = new JComboBox<>();
 
         // PNLTABLA-------------------------------------------------------
         pnlTabla = new JPanel();
@@ -183,156 +187,163 @@ public class menu extends JPanel implements ComponentListener, ActionListener, I
 
             if (!band) {
                 if (rdNuevo.isSelected()) {
-                    txtFamid.setText("*");
-                    txtFamid.setEditable(false);
-                    txtArtId.setText("*");
-                    txtArtId.setEditable(false);
+                    txtTipid.setText("*");
+                    txtTipid.setEditable(false);
+                    txtClienteId.setText("*");
+                    txtClienteId.setEditable(false);
                 }
                 if (rdModificar.isSelected()) {
-                    txtFamid.setText("");
-                    txtFamid.setEditable(true);
-                    txtArtId.setText("");
-                    txtArtId.setEditable(true);
+                    txtTipid.setText("");
+                    txtTipid.setEditable(true);
+                    txtClienteId.setText("");
+                    txtClienteId.setEditable(true);
                 }
             }
-
-            if (cmbTablas.getSelectedItem().equals("familias")) {
-                System.out.println("Familias");
-                showFamilias();
+            if (cmbTablas.getSelectedItem().toString().equalsIgnoreCase("tipos")) {
+                System.out.println("Tipos");
+                showTipos(); // Si es necesario mostrar los tipos, descomenta esta línea y
 
                 modelo.setRowCount(0);
                 modelo.setColumnCount(0);
 
-                modelo.addColumn("FamId");
-                modelo.addColumn("FamNombre");
-                llenaTablaFam();
+                modelo.addColumn("TipId");
+                modelo.addColumn("TipNombre");
+                llenarTablaTipos(); // Suponiendo que este método llena la tabla con datos de la entidad Tipos
                 return;
             }
-            if (cmbTablas.getSelectedItem().equals("articulos")) {
-                System.out.println("Articulos");
-                txtFamid.setText("");
-                txtFamid.setEditable(true);
-                showArticulos();
+            if (cmbTablas.getSelectedItem().toString().equalsIgnoreCase("clientes")) {
+                System.out.println("Clientes");
+                txtClienteId.setEditable(true);
+                showClientes(); // Si es necesario mostrar los clientes, descomenta esta
+                // línea y crea el método showClientes()
 
                 modelo.setRowCount(0);
                 modelo.setColumnCount(0);
 
-                modelo.addColumn("ArtId");
-                modelo.addColumn("ArtNombre");
-                modelo.addColumn("ArtDescripcion");
-                modelo.addColumn("ArtPrecio");
-                modelo.addColumn("FamNombre");
-                llenaTablaArt();
+                modelo.addColumn("CliId");
+                modelo.addColumn("CliNombre");
+                modelo.addColumn("CliApellidos");
+                modelo.addColumn("CliSexo");
+                modelo.addColumn("CliLimiteCredito");
+                modelo.addColumn("TipId");
+                llenarTablaClientes(); // Suponiendo que este método llena la tabla con datos de la entidad Clientes
                 return;
             }
         }
         if (evt.getSource() == btnLimpiar) {
             limpiar();
+            return;
         }
+
         if (evt.getSource() == btnGuardar) {
-            if (cmbTablas.getSelectedItem().equals("familias")) {
-                if (txtFamNombre.getText().equals("") || txtFamid.getText().equals("")) {
+            if (cmbTablas.getSelectedItem().toString().equalsIgnoreCase("tipos")) {
+                if (txtTipNombre.getText().equals("") || txtTipid.getText().equals("")) {
                     Notifications.getInstance().show(Notifications.Type.INFO,
                             Notifications.Location.TOP_CENTER,
                             "Inserte datos en los campos");
                     return;
                 }
-                insertarTablaFam();
+                try {
+                    Integer.parseInt(txtTipid.getText());
+                } catch (NumberFormatException e) {
+                    ErrorHandler.showNotification("Error: El TipId no es un número válido.");
+                    System.out.println("Error: El TipId no es un número válido.");
+                    return;
+                }
+                insertarTablaTip();
                 btnGuardar.setEnabled(false);
                 return;
             }
             //
-            if (cmbTablas.getSelectedItem().equals("articulos")) {
-                if (txtArtNombre.getText().equals("") || txtArtDescripcion.getText().equals("")
-                        || txtArtPrecio.getText().equals("")) {
+            if (cmbTablas.getSelectedItem().toString().equalsIgnoreCase("clientes")) {
+                if (txtClienteNombre.getText().equals("") || txtClienteApellidos.getText().equals("")
+                        || txtClienteLimiteCredito.getText().equals("")) {
                     Notifications.getInstance().show(Notifications.Type.INFO,
                             Notifications.Location.TOP_CENTER,
                             "Inserte datos en los Campos Vacios");
                     return;
                 }
                 try {
-                    Float.parseFloat(txtArtPrecio.getText());
+                    Float.parseFloat(txtClienteLimiteCredito.getText());
                 } catch (NumberFormatException e) {
-                    ErrorHandler.showNotification("Error: El ArtPrecio no es un número válido.");
-                    System.out.println("Error: El precio no es un número válido.");
+                    ErrorHandler.showNotification("Error: El ClienteLimiteCredito no es un número válido.");
+                    System.out.println("Error: El ClienteLimiteCredito no es un número válido.");
                     return;
                 }
-                if (!txtArtId.getText().equals("*")) {
+                if (!txtClienteId.getText().equals("*")) {
                     try {
-                        Integer.parseInt(txtArtId.getText());
+                        Integer.parseInt(txtClienteId.getText());
                     } catch (NumberFormatException e) {
-                        ErrorHandler.showNotification("Error: El artId no es un número válido.");
-                        System.out.println("Error: El artId no es un número válido.");
+                        ErrorHandler.showNotification("Error: El ClienteId no es un número válido.");
+                        System.out.println("Error: El ClienteId no es un número válido.");
                         return;
                     }
                 }
-                insertarTablaArticulo();
-                btnGuardar.setEnabled(false);
+                if (!txtClienteSexo.getText().equalsIgnoreCase("M")
+                        && !txtClienteSexo.getText().equalsIgnoreCase("F")) {
+                    ErrorHandler.showNotification("Error: El ClienteSexo debe ser 'M' o 'F'.");
+                    return;
+                }
+                insertarTablaCliente();
                 return;
             }
+            return;
         }
         if (evt.getSource() == rdModificar) {
             btnLimpiar.setEnabled(true);
             btnGuardar.setEnabled(true);
 
-            if (cmbTablas.getSelectedItem().equals("familias")) {
-                txtFamNombre.setEnabled(true);
+            if (cmbTablas.getSelectedItem().toString().equalsIgnoreCase("tipos")) {
+                txtTipNombre.setEnabled(true);
 
-                txtFamid.setText("");
-                txtFamid.setEditable(true);
+                txtTipid.setText("");
+                txtTipid.setEditable(true);
                 return;
             }
-            if (cmbTablas.getSelectedItem().equals("articulos")) {
-                txtArtNombre.setEnabled(true);
-                txtArtDescripcion.setEnabled(true);
-                txtArtPrecio.setEnabled(true);
-                cmbFamid.setEnabled(true);
+            if (cmbTablas.getSelectedItem().toString().equalsIgnoreCase("clientes")) {
+                txtClienteNombre.setEnabled(true);
+                txtClienteApellidos.setEnabled(true);
+                txtClienteLimiteCredito.setEnabled(true);
+                txtClienteSexo.setEnabled(true);
+                cmbTipid.setEnabled(true);
 
-                txtArtId.setText("");
-                txtArtId.setEditable(true);
+                txtClienteId.setText("");
+                txtClienteId.setEditable(true);
                 return;
             }
+            return;
         }
         if (evt.getSource() == rdNuevo) {
             btnLimpiar.setEnabled(true);
             btnGuardar.setEnabled(true);
-            // showFamilias();
-            if (cmbTablas.getSelectedItem().equals("familias")) {
-                txtFamid.setText("*");
-                txtFamid.setEditable(false);
+
+            if (cmbTablas.getSelectedItem().toString().equalsIgnoreCase("tipos")) {
+                txtTipid.setText("*");
+                txtTipNombre.setEditable(true);
+                txtTipid.setEditable(false);
                 return;
             }
-            if (cmbTablas.getSelectedItem().equals("articulos")) {
-                // showArticulos();
-                txtArtId.setText("*");
-                txtArtId.setEditable(false);
+            if (cmbTablas.getSelectedItem().toString().equalsIgnoreCase("clientes")) {
+                txtClienteNombre.setEnabled(true);
+                txtClienteApellidos.setEnabled(true);
+                txtClienteSexo.setEnabled(true);
+                txtClienteLimiteCredito.setEnabled(true);
+                cmbTipid.setEnabled(true);
+                txtClienteId.setText("*");
+                txtClienteId.setEditable(false);
                 return;
             }
         }
         if (evt.getSource() == btnBuscar) {
-            if (cmbTablas.getSelectedItem().equals("familias")) {
-                // if (txtFamid.getText().equals("") && txtFamNombre.getText().equals("")) {
-                // Notifications.getInstance().show(Notifications.Type.INFO,
-                // Notifications.Location.TOP_CENTER,
-                // "Inserte datos en los campos");
-                // return;
-                // }
-                System.out.println("Buscar Fam");
-
-                buscarFam();
+            if (cmbTablas.getSelectedItem().toString().equalsIgnoreCase("tipos")) {
+                System.out.println("Buscar Tipos");
+                buscarTip(); // Suponiendo que este método busca los tipos según los criterios especificados
                 return;
             }
-            if (cmbTablas.getSelectedItem().equals("articulos")) {
-                // if (txtArtId.getText().equals("") && txtArtNombre.getText().equals("")
-                // && txtArtDescripcion.getText().equals("") &&
-                // txtArtPrecio.getText().equals("")
-                // && txtFamid.getText().equals("")) {
-                // Notifications.getInstance().show(Notifications.Type.INFO,
-                // Notifications.Location.TOP_CENTER,
-                // "Inserte datos en los campos");
-                // return;
-                // }
-                buscarArt();
+            if (cmbTablas.getSelectedItem().toString().equalsIgnoreCase("clientes")) {
+                System.out.println("Buscar Clientes");
+                buscarCliente(); // Suponiendo que este método busca los clientes según los criterios
+                                 // especificados
                 return;
             }
         }
@@ -343,97 +354,104 @@ public class menu extends JPanel implements ComponentListener, ActionListener, I
             if (dialogResult != JOptionPane.YES_OPTION) {
                 return;
             }
-            if (cmbTablas.getSelectedItem().equals("familias")) {
-                if (txtFamid.getText().equals("") && txtFamNombre.getText().equals("")) {
-                    Notifications.getInstance().show(Notifications.Type.INFO,
-                            Notifications.Location.TOP_CENTER,
-                            "Ningun campo insertado, nada para eliminar");
+            if (cmbTablas.getSelectedItem().toString().equalsIgnoreCase("tipos")) {
+                if (txtTipid.getText().isEmpty() && txtTipNombre.getText().isEmpty()) {
+                    Notifications.getInstance().show(Notifications.Type.INFO, Notifications.Location.TOP_CENTER,
+                            "Ningún campo insertado, nada para eliminar");
                     return;
                 }
-                eliminarFam();
+                eliminarTipo(); // Suponiendo que este método elimina el tipo
                 return;
             }
-            if (cmbTablas.getSelectedItem().equals("articulos")) {
-                if (txtArtId.getText().isEmpty() && txtArtNombre.getText().isEmpty()
-                        && txtArtDescripcion.getText().isEmpty() && txtArtPrecio.getText().isEmpty()
-                        && cmbFamid.getSelectedItem().equals("Seleccione")) {
-                    Notifications.getInstance().show(Notifications.Type.INFO,
-                            Notifications.Location.TOP_CENTER,
-                            "Ningun campo insertado, nada para eliminar");
+            if (cmbTablas.getSelectedItem().toString().equalsIgnoreCase("clientes")) {
+                if (txtClienteId.getText().isEmpty() && txtClienteNombre.getText().isEmpty()
+                        && txtClienteApellidos.getText().isEmpty() && txtClienteSexo.getText().isEmpty()
+                        && txtClienteLimiteCredito.getText().isEmpty()
+                        && cmbTipid.getSelectedItem().toString().equals("Seleccione")) {
+                    Notifications.getInstance().show(Notifications.Type.INFO, Notifications.Location.TOP_CENTER,
+                            "Ningún campo insertado, nada para eliminar");
                     return;
                 }
-                eliminarArt();
+                eliminarCliente(); // Suponiendo que este método elimina el cliente
                 return;
             }
         }
     }
 
     private void limpiar() {
-        btnGuardar.setEnabled(true);
-        if (cmbTablas.getSelectedItem().equals("familias")) {
-            if (rdNuevo.isSelected()) {
-                txtFamid.setText("*");
-                txtFamNombre.setText("");
 
-                txtFamNombre.setEnabled(true);
+        if (cmbTablas.getSelectedItem().toString().equalsIgnoreCase("tipos")) {
+            if (rdNuevo.isSelected()) {
+                txtTipid.setText("*");
+                txtTipNombre.setText("");
+
+                txtTipNombre.setEnabled(true);
                 return;
             }
-            txtFamid.setText("");
-            txtFamNombre.setText("");
+            txtTipid.setText("");
+            txtTipNombre.setText("");
             return;
         }
-        if (cmbTablas.getSelectedItem().equals("articulos")) {
+        if (cmbTablas.getSelectedItem().toString().equalsIgnoreCase("clientes")) {
             if (rdNuevo.isSelected()) {
-                txtArtId.setText("*");
-                txtArtNombre.setText("");
-                txtArtDescripcion.setText("");
-                txtArtPrecio.setText("");
+                txtClienteId.setText("*");
+                txtClienteNombre.setText("");
+                txtClienteApellidos.setText("");
+                txtClienteSexo.setText("");
+                txtClienteLimiteCredito.setText("");
+                cmbTipid.setSelectedItem("Seleccione");
 
-                txtArtNombre.setEnabled(true);
-                txtArtDescripcion.setEnabled(true);
-                txtArtPrecio.setEnabled(true);
-                cmbFamid.setEnabled(true);
+                txtClienteNombre.setEnabled(true);
+                txtClienteApellidos.setEnabled(true);
+                txtClienteSexo.setEnabled(true);
+                txtClienteLimiteCredito.setEnabled(true);
+                cmbTipid.setEnabled(true);
                 return;
             }
 
-            txtArtId.setText("");
-            txtArtNombre.setText("");
-            txtArtDescripcion.setText("");
-            txtArtPrecio.setText("");
+            txtClienteId.setText("");
+            txtClienteNombre.setText("");
+            txtClienteApellidos.setText("");
+            txtClienteSexo.setText("");
+            txtClienteLimiteCredito.setText("");
+            cmbTipid.setSelectedItem("Seleccione");
             return;
         }
     }
 
-    private void eliminarArt() {
+    private void eliminarCliente() {
         try {
             Statement s = ConexionDB.conexion.createStatement();
 
-            StringBuilder consulta = new StringBuilder("DELETE FROM articulos WHERE");
+            StringBuilder consulta = new StringBuilder("DELETE FROM clientes WHERE");
 
-            if (!cmbFamid.getSelectedItem().equals("Seleccione")) {
-
-                ResultSet re = s.executeQuery(
-                        "select famid from familias where famnombre = '" + cmbFamid.getSelectedItem() + "';");
+            if (!cmbTipid.getSelectedItem().toString().equalsIgnoreCase("Seleccione")) {
+                ResultSet re = s
+                        .executeQuery("SELECT tipid FROM tipos WHERE tipnombre = '" + cmbTipid.getSelectedItem() + "'");
                 re.next();
-                int famid = re.getInt("famid");
-                consulta.append(" famid = ").append(famid).append("  AND");
+                int tipid = re.getInt("tipid");
+                consulta.append(" tipid = ").append(tipid).append("  AND");
             }
 
-            // agregar condiciones según los campos proporcionados
-            if (!txtArtId.getText().isEmpty()) {
-                consulta.append(" artid = ").append(txtArtId.getText()).append("  AND");
+            // Agregar condiciones según los campos proporcionados
+            if (!txtClienteId.getText().isEmpty()) {
+                consulta.append(" cliid = ").append(txtClienteId.getText()).append("  AND");
             }
 
-            if (!txtArtNombre.getText().isEmpty()) {
-                consulta.append(" artnombre = '").append(txtArtNombre.getText()).append("'  AND");
+            if (!txtClienteNombre.getText().isEmpty()) {
+                consulta.append(" clinombre = '").append(txtClienteNombre.getText()).append("'  AND");
             }
 
-            if (!txtArtDescripcion.getText().isEmpty()) {
-                consulta.append(" artdescripcion = '").append(txtArtDescripcion.getText()).append("'  AND");
+            if (!txtClienteApellidos.getText().isEmpty()) {
+                consulta.append(" cliapellidos = '").append(txtClienteApellidos.getText()).append("'  AND");
             }
 
-            if (!txtArtPrecio.getText().isEmpty()) {
-                consulta.append(" artprecio = ").append(txtArtPrecio.getText()).append("  AND");
+            if (!txtClienteSexo.getText().isEmpty()) {
+                consulta.append(" clisexo = '").append(txtClienteSexo.getText()).append("'  AND");
+            }
+
+            if (!txtClienteLimiteCredito.getText().isEmpty()) {
+                consulta.append(" cliLimiteCredito = ").append(txtClienteLimiteCredito.getText()).append("  AND");
             }
 
             // Eliminar lo adicional al final de la consulta
@@ -442,41 +460,56 @@ public class menu extends JPanel implements ComponentListener, ActionListener, I
             // Ejecutar la consulta
             s.execute(consulta.toString());
 
+            if (s.getUpdateCount() == 0) {
+                Notifications.getInstance().show(Notifications.Type.INFO, Notifications.Location.TOP_CENTER,
+                        "No se encontraron registros para eliminar.");
+            } else {
+                Notifications.getInstance().show(Notifications.Type.INFO, Notifications.Location.TOP_CENTER,
+                        "Registros eliminados correctamente.");
+            }
+
             // Procesar y mostrar los resultados (usar según tus necesidades)
             modelo.setRowCount(0);
-            llenaTablaArt();
+            llenarTablaClientes();
 
         } catch (SQLException e) {
             ErrorHandler.handleSqlException(e);
             System.out.println("Error: " + e.getErrorCode());
         }
-
     }
 
-    private void eliminarFam() {
+    private void eliminarTipo() {
         try {
             Statement s = ConexionDB.conexion.createStatement();
 
-            StringBuilder consulta = new StringBuilder("DELETE FROM familias WHERE");
+            StringBuilder consulta = new StringBuilder("DELETE FROM tipos WHERE");
 
             // agregar condiciones según los campos proporcionados
-            if (!txtFamid.getText().isEmpty()) {
-                consulta.append(" famid = ").append(txtFamid.getText()).append("  AND");
+            if (!txtTipid.getText().isEmpty()) {
+                consulta.append(" tipid = ").append(txtTipid.getText()).append("  AND");
             }
 
-            if (!txtFamNombre.getText().isEmpty()) {
-                consulta.append(" famnombre = '").append(txtFamNombre.getText()).append("'  AND");
+            if (!txtTipNombre.getText().isEmpty()) {
+                consulta.append(" tipnombre = '").append(txtTipNombre.getText()).append("'  AND");
             }
-
             // Eliminar lo adicional al final de la consulta
             consulta.delete(consulta.length() - 5, consulta.length());
 
             // Ejecutar la consulta
             s.execute(consulta.toString());
 
+            // mostrar notificación
+            if (s.getUpdateCount() == 0) {
+                Notifications.getInstance().show(Notifications.Type.INFO, Notifications.Location.TOP_CENTER,
+                        "No se encontró ningún tipo para eliminar.");
+            } else {
+                Notifications.getInstance().show(Notifications.Type.INFO, Notifications.Location.TOP_CENTER,
+                        "Tipo eliminado correctamente.");
+            }
+
             // Procesar y mostrar los resultados (usar según tus necesidades)
             modelo.setRowCount(0);
-            llenaTablaFam();
+            llenarTablaTipos();
 
         } catch (SQLException e) {
             ErrorHandler.handleSqlException(e);
@@ -484,32 +517,43 @@ public class menu extends JPanel implements ComponentListener, ActionListener, I
         }
     }
 
-    private void buscarArt() {
+    private void buscarCliente() {
         modelo.setRowCount(0);
         try {
             Statement s = ConexionDB.conexion.createStatement();
 
             StringBuilder consulta = new StringBuilder(
-                    "SELECT artid, artnombre, artdescripcion, artprecio, f.FamNombre from articulos inner join familias f on articulos.famid = f.famid WHERE");
-
-            consulta.append(" f.famnombre = '").append(cmbFamid.getSelectedItem()).append("'  AND");
+                    "SELECT cliid, clinombre, cliapellidos, clisexo, cliLimiteCredito, t.tipnombre FROM clientes c INNER JOIN tipos t ON c.tipid = t.tipid WHERE");
 
             // Verificar y agregar condiciones según los campos proporcionados por el
             // usuario
-            if (!txtArtId.getText().isEmpty()) {
-                consulta.append(" artid = ").append(txtArtId.getText()).append("  AND");
+            if (!txtClienteId.getText().isEmpty()) {
+                consulta.append(" c.cliid = ").append(txtClienteId.getText()).append("  AND");
             }
 
-            if (!txtArtNombre.getText().isEmpty()) {
-                consulta.append(" artnombre LIKE '%").append(txtArtNombre.getText()).append("%'  AND");
+            if (!txtClienteNombre.getText().isEmpty()) {
+                consulta.append(" c.clinombre LIKE '%").append(txtClienteNombre.getText()).append("%'  AND");
             }
 
-            if (!txtArtDescripcion.getText().isEmpty()) {
-                consulta.append(" artdescripcion LIKE '%").append(txtArtDescripcion.getText()).append("%'  AND");
+            if (!txtClienteApellidos.getText().isEmpty()) {
+                consulta.append(" c.cliapellidos LIKE '%").append(txtClienteApellidos.getText()).append("%'  AND");
             }
 
-            if (!txtArtPrecio.getText().isEmpty()) {
-                consulta.append(" artprecio = ").append(txtArtPrecio.getText()).append("  AND");
+            if (!txtClienteSexo.getText().isEmpty()) {
+                consulta.append(" c.clisexo = '").append(txtClienteSexo.getText()).append("'  AND");
+            }
+
+            if (!txtClienteLimiteCredito.getText().isEmpty()) {
+                consulta.append(" c.cliLimiteCredito = ").append(txtClienteLimiteCredito.getText()).append("  AND");
+            }
+
+            if (!cmbTipid.getSelectedItem().toString().equalsIgnoreCase("Seleccione")) {
+                // Suponiendo que cmbTipid contiene los nombres de los tipos y se necesita el id
+                ResultSet re = s
+                        .executeQuery("SELECT tipid FROM tipos WHERE tipnombre = '" + cmbTipid.getSelectedItem() + "'");
+                re.next();
+                int tipid = re.getInt("tipid");
+                consulta.append(" c.tipid = ").append(tipid).append("  AND");
             }
 
             // Eliminar el "AND" adicional al final de la consulta
@@ -519,32 +563,32 @@ public class menu extends JPanel implements ComponentListener, ActionListener, I
             ResultSet rs = s.executeQuery(consulta.toString());
 
             while (rs.next()) {
-                modelo.addRow(new Object[] { rs.getInt("artid"), rs.getString("artnombre"),
-                        rs.getString("artdescripcion"), rs.getDouble("artprecio"), rs.getString("famnombre") });
+                modelo.addRow(new Object[] { rs.getInt("cliid"), rs.getString("clinombre"),
+                        rs.getString("cliapellidos"), rs.getString("clisexo"), rs.getDouble("cliLimiteCredito"),
+                        rs.getString("tipnombre") });
             }
 
         } catch (SQLException e) {
-            System.out.println("auq");
             ErrorHandler.handleSqlException(e);
             System.out.println("Error: " + e.getErrorCode() + ": " + e);
         }
     }
 
-    private void buscarFam() {
+    private void buscarTip() {
         modelo.setRowCount(0);
         try {
             Statement s = ConexionDB.conexion.createStatement();
 
-            StringBuilder consulta = new StringBuilder("SELECT * FROM familias WHERE");
+            StringBuilder consulta = new StringBuilder("SELECT * FROM tipos WHERE");
 
             // Verificar y agregar condiciones según los campos proporcionados por el
             // usuario
-            if (!txtFamid.getText().isEmpty()) {
-                consulta.append(" famid = ").append(txtFamid.getText()).append("  AND");
+            if (!txtTipid.getText().isEmpty()) {
+                consulta.append(" tipid = ").append(txtTipid.getText()).append("  AND");
             }
 
-            if (!txtFamNombre.getText().isEmpty()) {
-                consulta.append(" famnombre LIKE '%").append(txtFamNombre.getText()).append("%'  AND");
+            if (!txtTipNombre.getText().isEmpty()) {
+                consulta.append(" tipnombre LIKE '%").append(txtTipNombre.getText()).append("%'  AND");
             }
 
             // Eliminar el "AND" adicional al final de la consulta
@@ -555,8 +599,8 @@ public class menu extends JPanel implements ComponentListener, ActionListener, I
 
             // Procesar y mostrar los resultados (usar según tus necesidades)
             while (rs.next()) {
-                modelo.addRow(new Object[] { rs.getInt("famid"), rs.getString("famnombre") });
-                System.out.println("FamId: " + rs.getInt("famid") + ", FamNombre: " + rs.getString("famnombre"));
+                modelo.addRow(new Object[] { rs.getInt("tipid"), rs.getString("tipnombre") });
+                System.out.println("TipId: " + rs.getInt("tipid") + ", TipNombre: " + rs.getString("tipnombre"));
             }
 
         } catch (SQLException e) {
@@ -564,58 +608,58 @@ public class menu extends JPanel implements ComponentListener, ActionListener, I
         }
     }
 
-    private void insertarTablaFam() {
+    private void insertarTablaTip() {
         try {
             Statement s = ConexionDB.conexion.createStatement();
 
-            // si la familia no existe no se puede modificar en la tabla
-            if (!txtFamid.getText().equals("*")) {
-                ResultSet re = s.executeQuery("select * from familias where famid = " + txtFamid.getText() + ";");
+            // Si el tipo no existe, no se puede modificar en la tabla
+            if (!txtTipid.getText().equals("*")) {
+                ResultSet re = s.executeQuery("SELECT * FROM tipos WHERE tipid = " + txtTipid.getText() + ";");
                 if (!re.next()) {
                     Notifications.getInstance().show(Notifications.Type.INFO,
                             Notifications.Location.TOP_CENTER,
-                            "La Familia no existe.");
+                            "El Tipo no existe.");
                     return;
                 }
             }
 
             // Verificar si el procedimiento ya existe
             ResultSet rs = s.executeQuery(
-                    "SELECT COUNT(*) FROM information_schema.routines WHERE routine_name = 'Sp_MttoFamilias'");
+                    "SELECT COUNT(*) FROM information_schema.routines WHERE routine_name = 'Sp_MttoTipos'");
             rs.next();
             int procedureCount = rs.getInt(1);
             if (procedureCount == 0) {
-                s.execute(procedimientoFam());
+                s.execute(procedimientoTipos());
                 System.out.println("Procedure created successfully.");
             }
 
-            if (txtFamid.getText().equals("*")) {
-                txtFamid.setText("0");
+            if (txtTipid.getText().equals("*")) {
+                txtTipid.setText("0");
             }
 
-            CallableStatement cs = ConexionDB.conexion.prepareCall("{call Sp_MttoFamilias(?, ?)}");
+            CallableStatement cs = ConexionDB.conexion.prepareCall("{call Sp_MttoTipos(?, ?)}");
 
             // Configurar los parámetros de entrada y salida
             cs.registerOutParameter(1, java.sql.Types.INTEGER);
-            cs.setInt(1, Integer.parseInt(txtFamid.getText())); // famId
+            cs.setInt(1, Integer.parseInt(txtTipid.getText())); // tipId
 
-            cs.setString(2, txtFamNombre.getText()); // famNombre
+            cs.setString(2, txtTipNombre.getText()); // tipNombre
 
             cs.execute();
 
-            // Obtener el valor del parámetro de salida famId
-            int famIdOutput = cs.getInt(1);
-            System.out.println(txtFamid.getText() + " FAM");
+            // Obtener el valor del parámetro de salida tipId
+            int tipIdOutput = cs.getInt(1);
+            System.out.println(txtTipid.getText() + " TIP");
 
             modelo.setRowCount(0);
-            llenaTablaFam();
+            llenarTablaTipos();
 
-            // -pendiente de revisar si dejar output o volver a poner *
+            // - pendiente de revisar si dejar output o volver a poner *
             // ---------------------------------------
-            txtFamid.setText(String.valueOf(famIdOutput));
-            // txtFamid.setText("*");
+            txtTipid.setText(String.valueOf(tipIdOutput));
+            // txtTipid.setText("*");
             if (rdNuevo.isSelected()) {
-                txtFamNombre.setEnabled(false);
+                txtTipNombre.setEnabled(false);
             }
 
         } catch (SQLException e) {
@@ -624,77 +668,81 @@ public class menu extends JPanel implements ComponentListener, ActionListener, I
         }
     }
 
-    private void insertarTablaArticulo() {
+    private void insertarTablaCliente() {
         try {
             Statement s = ConexionDB.conexion.createStatement();
 
-            // si el articulo no existe no se puede modificar en la tabla
-            if (!txtArtId.getText().equals("*")) {
+            // Si el cliente no existe, no se puede modificar en la tabla
+            if (!txtClienteId.getText().equals("*")) {
                 ResultSet re = s.executeQuery(
-                        "select * from articulos inner join familias f on articulos.famid = f.famid where artid = "
-                                + txtArtId.getText() + ";");
+                        "SELECT * FROM clientes INNER JOIN tipos t ON clientes.tipid = t.tipid WHERE cliid = "
+                                + txtClienteId.getText() + ";");
                 if (!re.next()) {
                     Notifications.getInstance().show(Notifications.Type.INFO,
                             Notifications.Location.TOP_CENTER,
-                            "El Articulo no existe.");
+                            "El Cliente no existe.");
                     re.close();
                     return;
                 }
             }
 
+            // Obtener el tipid correspondiente al nombre del tipo seleccionado
             ResultSet re = s.executeQuery(
-                    "select famid, famnombre from familias where famnombre = '" + cmbFamid.getSelectedItem() + "';");
-            re.next();
-            int famid = re.getInt("famid");
-            String famnombre = re.getString("famnombre");
+                    "SELECT tipid FROM tipos WHERE tipnombre = '" + cmbTipid.getSelectedItem() + "'");
+            if (!re.next()) {
+                Notifications.getInstance().show(Notifications.Type.INFO,
+                        Notifications.Location.TOP_CENTER,
+                        "El Tipo seleccionado no existe.");
+                re.close();
+                return;
+            }
+            int tipid = re.getInt("tipid");
             re.close();
 
             // Verificar si el procedimiento ya existe
             ResultSet rs = s.executeQuery(
-                    "SELECT COUNT(*) FROM information_schema.routines WHERE routine_name = 'Sp_MttoArticulos'");
+                    "SELECT COUNT(*) FROM information_schema.routines WHERE routine_name = 'Sp_MttoClientes'");
             rs.next();
             int procedureCount = rs.getInt(1);
             if (procedureCount == 0) {
-                s.execute(procedimientoArt());
+                s.execute(procedimientoClientes());
                 System.out.println("Procedure created successfully.");
             }
             rs.close();
 
-            if (txtArtId.getText().equals("*")) {
-                txtArtId.setText("0");
+            if (txtClienteId.getText().equals("*")) {
+                txtClienteId.setText("0");
             }
 
-            CallableStatement cs = ConexionDB.conexion.prepareCall("{call Sp_MttoArticulos(?, ?, ?, ?, ?)}");
+            CallableStatement cs = ConexionDB.conexion.prepareCall("{call Sp_MttoClientes(?, ?, ?, ?, ?, ?)}");
 
             // Configurar los parámetros de entrada y salida
-            cs.registerOutParameter(1, java.sql.Types.INTEGER); // artId (parámetro de salida)
-            cs.setInt(1, Integer.parseInt(txtArtId.getText())); // artId (parámetro de entrada)
-            cs.setString(2, txtArtNombre.getText()); // artNombre
-            cs.setString(3, txtArtDescripcion.getText()); // artDescripcion
-            cs.setDouble(4, Double.parseDouble(txtArtPrecio.getText())); // artPrecio
-
-            System.out.println("FAMNOMBRE: " + famnombre + " FAMID: " + famid);
-            cs.setInt(5, famid); // famId
+            cs.registerOutParameter(1, java.sql.Types.INTEGER); // cliId (parámetro de salida)
+            cs.setInt(1, Integer.parseInt(txtClienteId.getText())); // cliId (parámetro de entrada)
+            cs.setString(2, txtClienteNombre.getText()); // cliNombre
+            cs.setString(3, txtClienteApellidos.getText()); // cliApellidos
+            cs.setString(4, txtClienteSexo.getText()); // cliSexo
+            cs.setDouble(5, Double.parseDouble(txtClienteLimiteCredito.getText())); // cliLimiteCredito
+            cs.setInt(6, tipid); // tipId
 
             cs.execute();
 
-            // Obtener el valor del parámetro de salida artId
-            int artIdOutput = cs.getInt(1);
+            // Obtener el valor del parámetro de salida cliId
+            int cliIdOutput = cs.getInt(1);
             cs.close();
             Notifications.getInstance().show(Notifications.Type.INFO,
                     Notifications.Location.TOP_CENTER,
-                    "Articulo guardado correctamente. ArtId: " + artIdOutput);
+                    "Cliente guardado correctamente. CliId: " + cliIdOutput);
             modelo.setRowCount(0);
-            System.out.println("Antes");
-            llenaTablaArt();
-            System.out.println("Despu");
-            // txtArtId.setText(String.valueOf(artIdOutput));
-            txtArtId.setText(artIdOutput + "");
+            llenarTablaClientes();
+            txtClienteId.setText(String.valueOf(cliIdOutput));
             if (rdNuevo.isSelected()) {
-                txtArtNombre.setEnabled(false);
-                txtArtDescripcion.setEnabled(false);
-                txtArtPrecio.setEnabled(false);
-                cmbFamid.setEnabled(false);
+                btnGuardar.setEnabled(false);
+                txtClienteNombre.setEnabled(false);
+                txtClienteApellidos.setEnabled(false);
+                txtClienteSexo.setEnabled(false);
+                txtClienteLimiteCredito.setEnabled(false);
+                cmbTipid.setEnabled(false);
             }
         } catch (SQLException e) {
             ErrorHandler.handleSqlException(e);
@@ -703,13 +751,13 @@ public class menu extends JPanel implements ComponentListener, ActionListener, I
         }
     }
 
-    private void llenaTablaFam() {
+    private void llenarTablaTipos() {
         try {
             Statement s = ConexionDB.conexion.createStatement();
-            ResultSet rs = s.executeQuery("select * from familias");
+            ResultSet rs = s.executeQuery("SELECT * FROM tipos");
 
             while (rs.next()) {
-                modelo.addRow(new Object[] { rs.getInt("famid"), rs.getString("famnombre") });
+                modelo.addRow(new Object[] { rs.getInt("tipid"), rs.getString("tipnombre") });
             }
 
         } catch (SQLException e) {
@@ -717,15 +765,23 @@ public class menu extends JPanel implements ComponentListener, ActionListener, I
         }
     }
 
-    private void llenaTablaArt() {
+    private void llenarTablaClientes() {
         try {
             Statement s = ConexionDB.conexion.createStatement();
             ResultSet rs = s.executeQuery(
-                    "select artid, artnombre, artdescripcion, artprecio, f.FamNombre  from articulos inner join familias f on articulos.famid = f.famid");
+                    "SELECT cliid, clinombre, cliapellidos, clisexo, clilimitecredito, t.tipnombre " +
+                            "FROM clientes c " +
+                            "INNER JOIN tipos t ON c.tipid = t.tipid");
 
             while (rs.next()) {
-                modelo.addRow(new Object[] { rs.getInt("artid"), rs.getString("artnombre"),
-                        rs.getString("artdescripcion"), rs.getDouble("artprecio"), rs.getString("Famnombre") });
+                modelo.addRow(new Object[] {
+                        rs.getInt("cliid"),
+                        rs.getString("clinombre"),
+                        rs.getString("cliapellidos"),
+                        rs.getString("clisexo"),
+                        rs.getDouble("clilimitecredito"),
+                        rs.getString("tipnombre")
+                });
             }
         } catch (SQLException e) {
             Notifications.getInstance().show(Notifications.Type.ERROR, Notifications.Location.TOP_CENTER,
@@ -734,32 +790,35 @@ public class menu extends JPanel implements ComponentListener, ActionListener, I
         }
     }
 
-    private void showArticulos() {
+    private void showClientes() {
         panelContent.removeAll();
-        txtFamid.setText("");
+        txtTipid.setText("");
 
         FlatAnimatedLafChange.showSnapshot();
-        btnGuardar.setEnabled(true);
-        panelContent.add(lblArtId);
+        panelContent.add(lblClienteId);
 
-        panelContent.add(txtArtId);
+        panelContent.add(txtClienteId);
 
-        panelContent.add(lblArtNombre);
+        panelContent.add(lblClienteNombre);
 
-        panelContent.add(txtArtNombre);
+        panelContent.add(txtClienteNombre);
 
-        panelContent.add(lblArtDescripcion);
+        panelContent.add(lblClienteApellidos);
 
-        panelContent.add(txtArtDescripcion);
+        panelContent.add(txtClienteApellidos);
 
-        panelContent.add(lblArtPrecio);
+        panelContent.add(lblClienteSexo);
 
-        panelContent.add(txtArtPrecio);
+        panelContent.add(txtClienteSexo);
 
-        panelContent.add(lblFamid);
+        panelContent.add(lblClienteLimiteCredito);
 
-        panelContent.add(cmbFamid);
-        llenarComboFam();
+        panelContent.add(txtClienteLimiteCredito);
+
+        panelContent.add(lblTipid);
+
+        panelContent.add(cmbTipid);
+        llenarComboTipos();
 
         pnlTabla.add(scroll, BorderLayout.CENTER);
 
@@ -767,32 +826,31 @@ public class menu extends JPanel implements ComponentListener, ActionListener, I
         FlatAnimatedLafChange.hideSnapshotWithAnimation();
     }
 
-    private void llenarComboFam() {
-        cmbFamid.removeAllItems();
-        cmbFamid.addItem("Seleccione");
+    private void llenarComboTipos() {
+        cmbTipid.removeAllItems();
+        cmbTipid.addItem("Seleccione");
         try {
             Statement s = ConexionDB.conexion.createStatement();
-            ResultSet rs = s.executeQuery("select * from familias");
+            ResultSet rs = s.executeQuery("SELECT * FROM tipos");
             while (rs.next()) {
-                cmbFamid.addItem(rs.getString("FamNombre"));
+                cmbTipid.addItem(rs.getString("tipnombre"));
             }
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
         }
     }
 
-    private void showFamilias() {
+    private void showTipos() {
         panelContent.removeAll();
 
         FlatAnimatedLafChange.showSnapshot();
-        btnGuardar.setEnabled(true);
-        panelContent.add(lblFamid);
+        panelContent.add(lblTipid);
 
-        panelContent.add(txtFamid);
+        panelContent.add(txtTipid);
 
-        panelContent.add(lblFamNombre);
+        panelContent.add(lblTipNombre);
 
-        panelContent.add(txtFamNombre);
+        panelContent.add(txtTipNombre);
 
         pnlTabla.add(scroll, BorderLayout.CENTER);
 
@@ -815,47 +873,41 @@ public class menu extends JPanel implements ComponentListener, ActionListener, I
         }
     }
 
-    public void modoConsulta() {
-        band = true;
+    public void setModo(int modo) {
+        // Common actions
         grupo.clearSelection();
-        txtArtId.setText("");
-        txtArtNombre.setText("");
-        txtArtDescripcion.setText("");
-        txtArtPrecio.setText("");
-
-        panel.setVisible(true);
-        btnBuscar.setVisible(true);
-        btnEliminar.setVisible(true);
-        rdModificar.setVisible(false);
-        rdNuevo.setVisible(false);
-        btnLimpiar.setVisible(false);
-        btnGuardar.setVisible(false);
+        btnGuardar.setEnabled(false);
+        txtClienteId.setText("");
+        // txtClienteNombre.setText("");
+        // txtClienteApellidos.setText("");
+        // txtClienteSexo.setText("");
+        // txtClienteLimiteCredito.setText("");
+        txtTipid.setText("");
+        // txtTipNombre.setText("");
         scroll.setVisible(true);
-
-        txtFamid.setEditable(true);
-        txtFamid.setText("");
-        txtArtId.setEditable(true);
-        txtArtId.setText("");
-    }
-
-    public void modoCaptura() {
-        band = false;
-        grupo.clearSelection();
-
-        txtArtId.setText("");
-        txtArtNombre.setText("");
-        txtArtDescripcion.setText("");
-        txtArtPrecio.setText("");
-
         panel.setVisible(true);
-        rdModificar.setVisible(true);
-        rdNuevo.setVisible(true);
-        btnLimpiar.setVisible(true);
-        btnGuardar.setVisible(true);
-        scroll.setVisible(true);
-        btnBuscar.setVisible(false);
-        btnEliminar.setVisible(false);
 
+        if (modo == ComponenteHeader.MODO_CAPTURA) {
+            // Set properties for capture mode
+            band = false;
+            rdModificar.setVisible(true);
+            rdNuevo.setVisible(true);
+            btnLimpiar.setVisible(true);
+            btnGuardar.setVisible(true);
+            btnBuscar.setVisible(false);
+            btnEliminar.setVisible(false);
+        } else if (modo == ComponenteHeader.MODO_CONSULTA) {
+            band = true;
+            // Set properties for consultation mode
+            txtClienteId.setEditable(true);
+            rdModificar.setVisible(false);
+            rdNuevo.setVisible(false);
+            btnLimpiar.setVisible(false);
+            btnGuardar.setVisible(false);
+            btnBuscar.setVisible(true);
+            btnEliminar.setVisible(true);
+            txtTipid.setEditable(true);
+        }
     }
 
     @Override
@@ -864,7 +916,7 @@ public class menu extends JPanel implements ComponentListener, ActionListener, I
         panel.setBounds(0, componenteHeader.getHeight(), getWidth(), (int) (getHeight() * .12));
 
         panelContent.setBounds(0, panel.getY() + panel.getHeight(), getWidth(),
-                (int) (getHeight() * .45) - panel.getHeight());
+                (int) (getHeight() * .5) - panel.getHeight());
 
         pnlTabla.setBounds(0, panelContent.getY() + panelContent.getHeight(),
                 getWidth(),
@@ -874,40 +926,40 @@ public class menu extends JPanel implements ComponentListener, ActionListener, I
         int h = panel.getHeight();
 
         int anchoComponente = (int) (w * .4);
-        int altoComponente = (int) (h * .9);
+        int altoComponente = (int) (h * .8);
         // -----------------------------------------------------------
         cmbTablas.setBounds((int) ((w * .025)), (int) (h * .03),
                 anchoComponente,
                 altoComponente);
-        cmbTablas.setFont(Rutinas2.getFont("SegoeUI", false, 12, getWidth(), getHeight(), 350));
+        cmbTablas.setFont(Rutinas2.getFont("SegoeUI", false, 10, getWidth(), getHeight(), 350));
 
         rdModificar.setBounds(cmbTablas.getX() + cmbTablas.getWidth(), (int) (h * .05), (int) (w * .20),
                 (int) (h * .45));
-        rdModificar.setFont(Rutinas2.getFont("SegoeUI", false, 12, getWidth(), getHeight(), 400));
+        rdModificar.setFont(Rutinas2.getFont("SegoeUI", false, 10, getWidth(), getHeight(), 400));
 
         rdNuevo.setBounds(cmbTablas.getX() + cmbTablas.getWidth(), rdModificar.getY() + rdModificar.getHeight(),
                 (int) (w * .20),
                 (int) (h * .45));
-        rdNuevo.setFont(Rutinas2.getFont("SegoeUI", false, 12, getWidth(), getHeight(), 400));
+        rdNuevo.setFont(Rutinas2.getFont("SegoeUI", false, 10, getWidth(), getHeight(), 400));
 
         btnLimpiar.setBounds(rdModificar.getX() + rdModificar.getWidth(), (int) (h * .05), (int) (w * .35),
                 (int) (h * .45));
-        btnLimpiar.setFont(Rutinas2.getFont("SegoeUI", false, 12, getWidth(), getHeight(), 400));
+        btnLimpiar.setFont(Rutinas2.getFont("SegoeUI", false, 10, getWidth(), getHeight(), 400));
 
         btnGuardar.setBounds(rdModificar.getX() + rdModificar.getWidth(), btnLimpiar.getY() + btnLimpiar.getHeight(),
                 (int) (w * .35),
                 (int) (h * .45));
-        btnGuardar.setFont(Rutinas2.getFont("SegoeUI", false, 12, getWidth(), getHeight(), 400));
+        btnGuardar.setFont(Rutinas2.getFont("SegoeUI", false, 10, getWidth(), getHeight(), 400));
 
         btnEliminar.setBounds(cmbTablas.getX() + cmbTablas.getWidth() + (int) (w * .05), (int) (h * .05),
                 (int) (w * .25),
                 (int) (h * .85));
-        btnEliminar.setFont(Rutinas2.getFont("SegoeUI", false, 12, getWidth(), getHeight(), 400));
+        btnEliminar.setFont(Rutinas2.getFont("SegoeUI", false, 10, getWidth(), getHeight(), 400));
 
         btnBuscar.setBounds(btnEliminar.getX() + btnEliminar.getWidth(), (int) (h * .05),
                 (int) (w * .25),
                 (int) (h * .85));
-        btnBuscar.setFont(Rutinas2.getFont("SegoeUI", false, 12, getWidth(), getHeight(), 400));
+        btnBuscar.setFont(Rutinas2.getFont("SegoeUI", false, 10, getWidth(), getHeight(), 400));
 
         // -----------------------------------------------------------
 
@@ -938,56 +990,60 @@ public class menu extends JPanel implements ComponentListener, ActionListener, I
         }
     }
 
-    private String procedimientoFam() {
-        return "CREATE PROCEDURE Sp_MttoFamilias\n"
-                + "@famId INT OUTPUT, @famNombre VARCHAR(40)\n"
+    private String procedimientoTipos() {
+        return "CREATE PROCEDURE Sp_MttoTipos\n"
+                + "@tipId INT OUTPUT, @tipNombre VARCHAR(20)\n"
                 + "AS\n"
                 + "BEGIN\n"
-                + "    IF EXISTS(SELECT * FROM familias WHERE famid = @famId)\n"
+                + "    IF EXISTS(SELECT * FROM tipos WHERE tipid = @tipId)\n"
                 + "    BEGIN\n"
-                + "        UPDATE familias SET famnombre = @famNombre WHERE famid = @famId;\n"
+                + "        UPDATE tipos SET tipnombre = @tipNombre WHERE tipid = @tipId;\n"
                 + "        IF @@ERROR <> 0\n"
                 + "        BEGIN\n"
-                + "            RAISERROR('Error al Actualizar en la tabla Familias', 16, 10);\n"
+                + "            RAISERROR('Error al Actualizar en la tabla Tipos', 16, 10);\n"
                 + "        END\n"
                 + "    END\n"
                 + "    ELSE\n"
                 + "    BEGIN\n"
-                + "        -- SI LA LLAVE PRIMARIA NO ES IDENTITY, SE BUSCA LA ULTIMA CLAVE MAS UNO\n"
-                + "        SELECT @famId = COALESCE(MAX(famid), 0) + 1 FROM familias;\n"
-                + "        INSERT INTO familias VALUES(@famId, @famNombre);\n"
+                + "        SELECT @tipId = COALESCE(MAX(tipid), 0) + 1 FROM tipos;\n"
+                + "        INSERT INTO tipos VALUES(@tipId, @tipNombre);\n"
                 + "        IF @@ERROR <> 0\n"
                 + "        BEGIN\n"
-                + "            RAISERROR('Error al Actualizar en la tabla Familias', 16, 10);\n"
+                + "            RAISERROR('Error al Insertar en la tabla Tipos', 16, 10);\n"
                 + "        END\n"
                 + "    END\n"
-                + "END";
+                + "END;";
     }
 
-    private String procedimientoArt() {
-        return "CREATE PROCEDURE Sp_MttoArticulos\n"
-                + "@artId INT OUTPUT, @artNombre VARCHAR(40), @artDescripcion VARCHAR(40), @artPrecio FLOAT, @famid int\n"
+    private String procedimientoClientes() {
+        return "CREATE PROCEDURE Sp_MttoClientes\n"
+                + "@cliId INT OUTPUT, @cliNombre VARCHAR(50), @cliApellidos VARCHAR(50),\n"
+                + "@cliSexo CHAR(1), @cliLimiteCredito NUMERIC(12, 2), @tipId INT\n"
                 + "AS\n"
                 + "BEGIN\n"
-                + "    IF EXISTS(SELECT * FROM articulos WHERE artid = @artId)\n"
+                + "    IF EXISTS(SELECT * FROM clientes WHERE cliid = @cliId)\n"
                 + "    BEGIN\n"
-                + "        UPDATE articulos SET artnombre = @artNombre, artdescripcion = @artDescripcion, artprecio = @artPrecio, famid=@famid WHERE artid = @artId;\n"
+                + "        UPDATE clientes\n"
+                + "        SET clinombre = @cliNombre, cliApellidos = @cliApellidos,\n"
+                + "            cliSexo = @cliSexo, cliLimiteCredito = @cliLimiteCredito,\n"
+                + "            tipid = @tipId\n"
+                + "        WHERE cliid = @cliId;\n"
                 + "        IF @@ERROR <> 0\n"
                 + "        BEGIN\n"
-                + "            RAISERROR('Error al Actualizar en la tabla Articulos', 16, 10);\n"
+                + "            RAISERROR('Error al Actualizar en la tabla Clientes', 16, 10);\n"
                 + "        END\n"
                 + "    END\n"
                 + "    ELSE\n"
                 + "    BEGIN\n"
-                + "        -- SI LA LLAVE PRIMARIA NO ES IDENTITY, SE BUSCA LA ULTIMA CLAVE MAS UNO\n"
-                + "        SELECT @artId = COALESCE(MAX(artid), 0) + 1 FROM articulos;\n"
-                + "        INSERT INTO articulos VALUES(@artId, @artNombre, @artDescripcion, @artPrecio, @famid);\n"
+                + "        SELECT @cliId = COALESCE(MAX(cliid), 0) + 1 FROM clientes;\n"
+                + "        INSERT INTO clientes\n"
+                + "        VALUES(@cliId, @cliNombre, @cliApellidos, @cliSexo, @cliLimiteCredito, @tipId);\n"
                 + "        IF @@ERROR <> 0\n"
                 + "        BEGIN\n"
-                + "            RAISERROR('Error al Actualizar en la tabla Articulos', 16, 10);\n"
+                + "            RAISERROR('Error al Insertar en la tabla Clientes', 16, 10);\n"
                 + "        END\n"
                 + "    END\n"
-                + "END";
+                + "END;";
     }
 
     @Override
@@ -997,30 +1053,39 @@ public class menu extends JPanel implements ComponentListener, ActionListener, I
 
     @Override
     public void focusLost(FocusEvent e) {
-
-        // llenar los campos txt de articulos
-        if (txtArtId.getText().equals("") || txtArtId.getText().equals("*") || band)
+        // Llenar los campos de texto del cliente
+        if (txtClienteId.getText().isEmpty() || txtClienteId.getText().equals("*")) {
             return;
-
-        System.out.println("entra");
+        }
+        try {
+            Integer.parseInt(txtClienteId.getText());
+        } catch (NumberFormatException ex) {
+            ErrorHandler.showNotification("Error: El ClienteId no es un número válido.");
+            return;
+        }
 
         try {
             Statement s = ConexionDB.conexion.createStatement();
             ResultSet rs = s.executeQuery(
-                    "select artnombre, artdescripcion, artprecio, f.FamNombre  from articulos inner join familias f on articulos.famid = f.famid where artid = "
-                            + txtArtId.getText() + "");
+                    "SELECT clinombre, cliapellidos, clisexo, clilimitecredito, t.tipnombre " +
+                            "FROM clientes c " +
+                            "INNER JOIN tipos t ON c.tipid = t.tipid " +
+                            "WHERE cliid = " + txtClienteId.getText());
+
             if (rs.next()) {
-                txtArtNombre.setText(rs.getString("artnombre"));
-                txtArtDescripcion.setText(rs.getString("artdescripcion"));
-                txtArtPrecio.setText(rs.getString("artprecio"));
-                cmbFamid.setSelectedItem(rs.getString("famNombre"));
+                txtClienteNombre.setText(rs.getString("clinombre"));
+                txtClienteApellidos.setText(rs.getString("cliapellidos"));
+                txtClienteSexo.setText(rs.getString("clisexo"));
+                txtClienteLimiteCredito.setText(rs.getString("clilimitecredito"));
+                cmbTipid.setSelectedItem(rs.getString("tipnombre"));
             } else {
                 Notifications.getInstance().show(Notifications.Type.INFO,
                         Notifications.Location.TOP_CENTER,
-                        "El Articulo no existe.");
-                txtArtNombre.setText("");
-                txtArtDescripcion.setText("");
-                txtArtPrecio.setText("");
+                        "El cliente no existe.");
+                txtClienteNombre.setText("");
+                txtClienteApellidos.setText("");
+                txtClienteSexo.setText("");
+                txtClienteLimiteCredito.setText("");
             }
         } catch (SQLException ex) {
             System.out.println("Error: " + ex.getMessage());

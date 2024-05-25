@@ -17,6 +17,8 @@ import java.awt.event.*;
 import mode.Rutinas2;
 
 public class ComponenteHeader extends JPanel implements ComponentListener, ActionListener {
+    public static final int MODO_CAPTURA = 0;
+    public static final int MODO_CONSULTA = 1;
 
     public static menu menu;
 
@@ -93,11 +95,11 @@ public class ComponenteHeader extends JPanel implements ComponentListener, Actio
             return;
         }
         if (btnModoCaptura == evt.getSource()) {
-            menu.modoCaptura();
+            menu.setModo(MODO_CAPTURA);
             return;
         }
         if (btnModoConsulta == evt.getSource()) {
-            menu.modoConsulta();
+            menu.setModo(MODO_CONSULTA);
             return;
         }
     }
@@ -105,7 +107,7 @@ public class ComponenteHeader extends JPanel implements ComponentListener, Actio
     @Override
     public void componentResized(ComponentEvent e) {
         int w = this.getWidth();
-        int h = this.getHeight();
+        int h = (int) (this.getHeight() * .9);
 
         lblModo.setBounds((int) (w * .05), (int) (h * .05), (int) (w * .40), (int) (h * .35));
         Font fuente = Rutinas2.getFont("Roboto", true, (int) (h), w, h, 350);
