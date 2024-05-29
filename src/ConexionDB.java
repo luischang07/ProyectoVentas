@@ -19,21 +19,21 @@ public class ConexionDB {
         this.usuario = usuario;
         this.password = password;
     }
-
+    
     public void getConexion() {
 
-        conexionUrl = "jdbc:sqlserver://" + servidor + ";"
-                + "database=" + basededatos + ";"
-                + "user=" + usuario + ";"
-                + "password=" + password + ";"
-                + "trustServerCertificate=true;"
-                + "loginTimeout=5;";
-        // conexionUrl = "jdbc:sqlserver://" + "Once" + ";"
-        // + "database=" + "ventas" + ";"
-        // + "user=" + "sa" + ";"
-        // + "password=" + "123456789" + ";"
-        // + "trustServerCertificate=true;"
-        // + "loginTimeout=5;";
+        // conexionUrl = "jdbc:sqlserver://" + servidor + ";"
+        //        + "database=" + basededatos + ";"
+        //         + "user=" + usuario + ";"
+        //         + "password=" + password + ";"
+        //         + "trustServerCertificate=true;"
+        //         + "loginTimeout=5;";
+        conexionUrl = "jdbc:sqlserver://" + "DESKTOP-BP14MON" + ";"
+        + "database=" + "Envios" + ";"
+        + "user=" + usuario + ";"
+        + "password=" + password + ";"
+        + "trustServerCertificate=true;"
+        + "loginTimeout=5;";
         try {
 
             conexion = DriverManager.getConnection(conexionUrl);

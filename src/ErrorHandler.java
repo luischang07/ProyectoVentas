@@ -25,12 +25,12 @@ public class ErrorHandler {
                 // Excedió el límite de caracteres permitido
                 showNotification("Error: 2628. El campo excede el límite de caracteres permitido.");
                 break;
-            case 262:
+            case 230:
                 // Error específico cuando está en modo modificar y la PK no es reconocida
-                showNotification("Error: 262. El Usuario NO tiene Permisos Para usar Procedimientos Almacenados.");
+                showNotification("Error: 230. No tienes permisos para seleccionar toda la tabla clientes");
                 break;
             case 229:
-                showNotification("Error: 229. El Usuario NO tiene permisos de Delete");
+                showNotification("Error: 229. No tiene permisos de usar procedimientos, seleccionar o eliminar");
                 break;
             case 5000:
                 showNotification("Error: 5000. " + e.getMessage());

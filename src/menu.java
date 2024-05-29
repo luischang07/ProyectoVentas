@@ -99,7 +99,8 @@ public class menu extends JPanel implements ComponentListener, ActionListener, I
                 + "border:10,20,30,10");
 
         cmbTablas = new JComboBox<String>(new String[] { "Seleccione" });
-        llenarCombo();
+        //llenarCombo();
+        cmbTablas.addItem("clientes");
         panel.add(cmbTablas);
 
         rdModificar = new JRadioButton("Modificar");
@@ -360,7 +361,7 @@ public class menu extends JPanel implements ComponentListener, ActionListener, I
                             "Ningún campo insertado, nada para eliminar");
                     return;
                 }
-                eliminarTipo(); // Suponiendo que este método elimina el tipo
+                eliminarTipo();
                 return;
             }
             if (cmbTablas.getSelectedItem().toString().equalsIgnoreCase("clientes")) {
@@ -372,7 +373,7 @@ public class menu extends JPanel implements ComponentListener, ActionListener, I
                             "Ningún campo insertado, nada para eliminar");
                     return;
                 }
-                eliminarCliente(); // Suponiendo que este método elimina el cliente
+                eliminarCliente(); 
                 return;
             }
         }
@@ -675,7 +676,7 @@ public class menu extends JPanel implements ComponentListener, ActionListener, I
             // Si el cliente no existe, no se puede modificar en la tabla
             if (!txtClienteId.getText().equals("*")) {
                 ResultSet re = s.executeQuery(
-                        "SELECT * FROM clientes INNER JOIN tipos t ON clientes.tipid = t.tipid WHERE cliid = "
+                        "SELECT cliid FROM clientes INNER JOIN tipos t ON clientes.tipid = t.tipid WHERE cliid = "
                                 + txtClienteId.getText() + ";");
                 if (!re.next()) {
                     Notifications.getInstance().show(Notifications.Type.INFO,
