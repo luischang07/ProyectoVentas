@@ -863,7 +863,8 @@ public class menu extends JPanel implements ComponentListener, ActionListener, I
     private void llenarCombo() {
         try {
             Statement s = ConexionDB.conexion.createStatement();
-            ResultSet rs = s.executeQuery("select TABLE_NAME from INFORMATION_SCHEMA.TABLES");
+            ResultSet rs = s
+                    .executeQuery("select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_NAME = 'Clientes'");
             while (rs.next()) {
                 cmbTablas.addItem(rs.getString("TABLE_NAME"));
             }
