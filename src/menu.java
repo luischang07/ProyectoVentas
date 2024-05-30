@@ -86,7 +86,7 @@ public class menu extends JPanel implements ComponentListener, ActionListener, I
 
     public void init() {
         setLayout(null);
-
+        //
         componenteHeader = new ComponenteHeader(this);
         add(componenteHeader, BorderLayout.NORTH);
 
