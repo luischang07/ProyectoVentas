@@ -1,7 +1,7 @@
 
 import java.sql.*;
 
-import raven.toast.Notifications;
+import javax.swing.JOptionPane;
 
 public class ConexionDB {
 
@@ -28,12 +28,6 @@ public class ConexionDB {
                 + "password=" + password + ";"
                 + "trustServerCertificate=true;"
                 + "loginTimeout=5;";
-        // conexionUrl = "jdbc:sqlserver://" + "DESKTOP-BP14MON" + ";"
-        // + "database=" + "Envios" + ";"
-        // + "user=" + usuario + ";"
-        // + "password=" + password + ";"
-        // + "trustServerCertificate=true;"
-        // + "loginTimeout=5;";
         try {
 
             conexion = DriverManager.getConnection(conexionUrl);
@@ -42,8 +36,8 @@ public class ConexionDB {
                 App.login(conexion);
             }
         } catch (SQLException e) {
-            Notifications.getInstance().show(Notifications.Type.INFO, Notifications.Location.TOP_CENTER,
-                    "Error al conectar a la base de datos");
+            ErrorHandler.showNotification("Error al conectar a la base de datos", "Error en Base de datos",
+                    JOptionPane.ERROR);
             System.err.println(e.getMessage());
         }
 

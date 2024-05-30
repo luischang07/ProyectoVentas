@@ -2,10 +2,6 @@
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
-import com.formdev.flatlaf.FlatClientProperties;
-
-import mode.LightDarkMode;
-
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
@@ -28,8 +24,6 @@ public class ComponenteHeader extends JPanel implements ComponentListener, Actio
     private JButton btnModoConsulta;
     private JButton logout;
 
-    private LightDarkMode lightDarkMode;
-
     public ComponenteHeader(menu menu) {
         ComponenteHeader.menu = menu;
         init();
@@ -43,15 +37,7 @@ public class ComponenteHeader extends JPanel implements ComponentListener, Actio
         setBorder(new EmptyBorder(2, 2, 2, 2));
         setLayout(null);
 
-        lightDarkMode = new LightDarkMode(60);
-        add(lightDarkMode);
-
         logout = new JButton("Logout");
-        logout.putClientProperty(FlatClientProperties.STYLE, ""
-                + "arc:9;"
-                + "focusWidth:0;"
-                + "borderWidth:0;"
-                + "innerFocusWidth:0");
         add(logout);
 
         lblModo = new JLabel("Modo");
@@ -61,21 +47,9 @@ public class ComponenteHeader extends JPanel implements ComponentListener, Actio
         pnlBtn = new JPanel();
         pnlBtn.setLayout(new Header());
         btnModoCaptura = new JButton("Captura");
-        btnModoCaptura.putClientProperty(FlatClientProperties.STYLE, ""
-                + "arc:999;"
-                + "foreground:$Menu.foreground;"
-                + "focusWidth:0;"
-                + "borderWidth:0;"
-                + "innerFocusWidth:0");
         pnlBtn.add(btnModoCaptura);
 
         btnModoConsulta = new JButton("Consulta");
-        btnModoConsulta.putClientProperty(FlatClientProperties.STYLE, ""
-                + "arc:999;"
-                + "foreground:$Menu.foreground;"
-                + "focusWidth:0;"
-                + "borderWidth:0;"
-                + "innerFocusWidth:0");
         pnlBtn.add(btnModoConsulta);
 
         add(pnlBtn);
@@ -113,8 +87,6 @@ public class ComponenteHeader extends JPanel implements ComponentListener, Actio
         Font fuente = Rutinas2.getFont("Roboto", true, (int) (h), w, h, 350);
         // lblModo.setFont(new Font("Roboto", Font.BOLD, (int) (h * .3)));
         lblModo.setFont(fuente);
-
-        lightDarkMode.setBounds((int) (w * .5), (int) (h * .05), (int) (w * .5), (int) (h * .35));
 
         logout.setBounds((int) (w * .7), (int) (h * .5), (int) (w * .25), (int) (h * .3));
         logout.setFont(Rutinas2.getFont("Roboto", true, (int) (h), w, h, 670));

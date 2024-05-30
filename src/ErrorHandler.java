@@ -1,6 +1,6 @@
 import java.sql.SQLException;
 
-import raven.toast.Notifications;
+import javax.swing.JOptionPane;
 
 public class ErrorHandler {
 
@@ -10,37 +10,39 @@ public class ErrorHandler {
 
         // Personalizar mensajes de error según el código de error SQL
         switch (errorCode) {
-            case 201:
-                showNotification("Error: 201. Violación de restricción de clave foránea. TipID");
-                break;
             case 547:
                 // Check constraint violation
-                showNotification("Error: 547. Violacion de restriccion SQL.");
+                showNotification("Violacion de restriccion SQL.", "Error: 547.", JOptionPane.ERROR_MESSAGE);
                 break;
             case 8115:
                 // El campo exede el limite de caracteres numerico
-                showNotification("Error: 8115. El campo exede el maximo de caracteres numerico.");
+                showNotification("El campo exede el maximo de caracteres numerico.", "Error: 8115.",
+                        JOptionPane.ERROR_MESSAGE);
                 break;
             case 2628:
                 // Excedió el límite de caracteres permitido
-                showNotification("Error: 2628. El campo excede el límite de caracteres permitido.");
+                showNotification("El campo excede el límite de caracteres permitido.", "Error: 2628.",
+                        JOptionPane.ERROR_MESSAGE);
                 break;
             case 230:
                 // Error específico cuando está en modo modificar y la PK no es reconocida
-                showNotification("Error: 230. No tienes permisos para seleccionar toda la tabla clientes");
+                showNotification("No tienes permisos para seleccionar toda la tabla clientes", "Error: 230.",
+                        JOptionPane.ERROR_MESSAGE);
                 break;
             case 229:
-                showNotification("Error: 229. No tiene permisos de usar procedimientos, seleccionar o eliminar");
+                showNotification("No tiene permisos de usar procedimientos, seleccionar o eliminar", "Error: 229.",
+                        JOptionPane.ERROR_MESSAGE);
                 break;
             case 5000:
-                showNotification("Error: 5000. " + e.getMessage());
+                showNotification(e.getMessage(), "Error: 5000.", JOptionPane.ERROR_MESSAGE);
                 break;
             case 50000:
                 // Insersion deshabilitada
-                showNotification("Error: 50000. " + e.getMessage());
+                showNotification(e.getMessage(), "Error: 50000.", JOptionPane.ERROR_MESSAGE);
                 break;
             case 168:
-                showNotification("Error: 168. El campo exede el limite de almacenamiento caracteres numerico");
+                showNotification("El campo exede el limite de almacenamiento caracteres numerico", "Error: 168.",
+                        JOptionPane.ERROR_MESSAGE);
                 break;
             default:
                 // Otro error SQL no manejado específicamente
@@ -51,11 +53,13 @@ public class ErrorHandler {
 
     private static void handleGenericSqlError(SQLException e) {
         String errorMessage = "Error SQL no manejado específicamente: " + e.getMessage();
-        showNotification(errorMessage);
+        showNotification(errorMessage, "Error SQL", JOptionPane.ERROR_MESSAGE);
     }
 
-    public static void showNotification(String message) {
+    public static void showNotification(String message, String title, int messageType) {
         System.out.println("Mostrar notificación de error en el centro: " + message);
-        Notifications.getInstance().show(Notifications.Type.ERROR, Notifications.Location.TOP_CENTER, message);
+        JOptionPane.showMessageDialog(null, message, title, messageType);
+        // Notifications.getInstance().show(Notifications.Type.ERROR,
+        // Notifications.Location.TOP_CENTER, message);
     }
 }
