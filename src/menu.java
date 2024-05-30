@@ -99,7 +99,7 @@ public class menu extends JPanel implements ComponentListener, ActionListener, I
                 + "border:10,20,30,10");
 
         cmbTablas = new JComboBox<String>(new String[] { "Seleccione" });
-        //llenarCombo();
+        // llenarCombo();
         cmbTablas.addItem("clientes");
         panel.add(cmbTablas);
 
@@ -362,6 +362,7 @@ public class menu extends JPanel implements ComponentListener, ActionListener, I
                     return;
                 }
                 eliminarTipo();
+                limpiar();
                 return;
             }
             if (cmbTablas.getSelectedItem().toString().equalsIgnoreCase("clientes")) {
@@ -373,7 +374,7 @@ public class menu extends JPanel implements ComponentListener, ActionListener, I
                             "Ningún campo insertado, nada para eliminar");
                     return;
                 }
-                eliminarCliente(); 
+                eliminarCliente();
                 return;
             }
         }
@@ -691,9 +692,9 @@ public class menu extends JPanel implements ComponentListener, ActionListener, I
             ResultSet re = s.executeQuery(
                     "SELECT tipid FROM tipos WHERE tipnombre = '" + cmbTipid.getSelectedItem() + "'");
             if (!re.next()) {
-                Notifications.getInstance().show(Notifications.Type.INFO,
+                Notifications.getInstance().show(Notifications.Type.ERROR,
                         Notifications.Location.TOP_CENTER,
-                        "El Tipo seleccionado no existe.");
+                        "Seleccione un tipo.");
                 re.close();
                 return;
             }
@@ -900,7 +901,6 @@ public class menu extends JPanel implements ComponentListener, ActionListener, I
         } else if (modo == ComponenteHeader.MODO_CONSULTA) {
             band = true;
             // Set properties for consultation mode
-            txtClienteId.setEditable(true);
             rdModificar.setVisible(false);
             rdNuevo.setVisible(false);
             btnLimpiar.setVisible(false);
@@ -908,6 +908,12 @@ public class menu extends JPanel implements ComponentListener, ActionListener, I
             btnBuscar.setVisible(true);
             btnEliminar.setVisible(true);
             txtTipid.setEditable(true);
+            txtClienteId.setEditable(true);
+            txtClienteNombre.setEnabled(true);
+            txtClienteApellidos.setEnabled(true);
+            txtClienteSexo.setEnabled(true);
+            txtClienteLimiteCredito.setEnabled(true);
+            cmbTipid.setEnabled(true);
         }
     }
 
@@ -1055,7 +1061,7 @@ public class menu extends JPanel implements ComponentListener, ActionListener, I
     @Override
     public void focusLost(FocusEvent e) {
         // Llenar los campos de texto del cliente
-        if (txtClienteId.getText().isEmpty() || txtClienteId.getText().equals("*")) {
+        if (txtClienteId.getText().isEmpty() || txtClienteId.getText().equals("*") || band) {
             return;
         }
         try {
